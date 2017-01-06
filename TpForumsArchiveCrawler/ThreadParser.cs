@@ -17,38 +17,43 @@ namespace TpForumsArchiveCrawler
         {
             string html = await httpResponseMessage.Content.ReadAsStringAsync();
             HtmlDocument htmlDocument = new HtmlDocument();
+            if (string.IsNullOrWhiteSpace(html)) return null;
             htmlDocument.LoadHtml(html);
 
             string postTitle =
                 HttpUtility.HtmlDecode(
-                    htmlDocument.DocumentNode.SelectSingleNode("//div[@id='navbar']/text()[3]").InnerText).Remove(0, 4);
+                    htmlDocument.DocumentNode.SelectSingleNode("//div[@id='navbar']/text()[3]")?.InnerText)?.Remove(0, 4);
 
             HtmlNodeCollection navbarNodes = htmlDocument.DocumentNode.SelectNodes("//div[@id='navbar']/a");
             BreadCrumb breadCrumb = ParseNavbar(navbarNodes); 
-            if (breadCrumb == null) return null;
 
             HtmlNodeCollection postNodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='post']");
             List<Post> posts = ParsePosts(postNodes);
-            Post firsPost = posts.First();
+            Post firsPost = posts?.First();
 
-            return new Thread( breadCrumb,postTitle, firsPost.PostTime, firsPost.User, threadId, posts.Count, posts);
+            return new Thread(breadCrumb,postTitle, firsPost?.PostTime, firsPost?.User, threadId, posts?.Count, posts);
         }
 
         private static BreadCrumb ParseNavbar(HtmlNodeCollection htmlNodeCollection)
         {
+            if (htmlNodeCollection == null) return null;
+
             if (htmlNodeCollection.Count == 3)
-              return new BreadCrumb(htmlNodeCollection[1].InnerText, htmlNodeCollection[2].InnerText);
+                return new BreadCrumb(htmlNodeCollection[1].InnerText, htmlNodeCollection[2].InnerText);
 
             Console.WriteLine("Found a different Navbar:");
             foreach (HtmlNode node in htmlNodeCollection)
             {
                 Console.WriteLine($"Node html = {node.OuterHtml}");
             }
+
             return null;
         }
 
         private static List<Post> ParsePosts(HtmlNodeCollection htmlNodeCollection)
         {
+            if (htmlNodeCollection == null || htmlNodeCollection.Count == 0) return null;
+
             List<Post> posts = new List<Post>();
             foreach (HtmlNode htmlNode in htmlNodeCollection)
             {

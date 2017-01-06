@@ -15,7 +15,7 @@ namespace TpForumsArchiveCrawler
         {
             HttpResponseMessage responseMessage = await _requestManager.Get(Link.TpForumsArchive.Replace("threadId", threadId.ToString()));
 
-            if (!responseMessage.IsSuccessStatusCode) return null;
+            if (responseMessage == null || !responseMessage.IsSuccessStatusCode) return null;
 
             return await ThreadParser.ParseThread(responseMessage, threadId);
         }

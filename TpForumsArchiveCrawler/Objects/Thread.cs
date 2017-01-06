@@ -10,22 +10,22 @@ namespace TpForumsArchiveCrawler.Objects
     {
         public BreadCrumb BreadCrumb { get; }
         public string Title { get; }
-        public DateTime PostTime { get; }
+        public DateTime? PostTime { get; }
         public User PostCreator { get; }
         public int ThreadId { get; }
-        public int postCount { get; }
-        public IEnumerable<Post> Posts { get; }
-       
+        public int? PostCount { get; }
+        public List<Post> Posts { get; }
 
-        public Thread(BreadCrumb breadCrumb,string title, DateTime postTime, User postCreator, int threadId, int postCount, IEnumerable<Post> posts)
+
+        public Thread(BreadCrumb breadCrumb, string title, DateTime? postTime, User postCreator, int threadId, int? postCount, List<Post> posts)
         {
+            BreadCrumb = breadCrumb;
             Title = title;
             PostTime = postTime;
             PostCreator = postCreator;
             ThreadId = threadId;
-            this.postCount = postCount;
+            PostCount = postCount;
             Posts = posts;
-            BreadCrumb = breadCrumb;
         }
     }
 }

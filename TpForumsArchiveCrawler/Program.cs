@@ -23,7 +23,6 @@ namespace TpForumsArchiveCrawler
 
             Thread t = await requests.GetThread(1);
 
-
             string json = JsonConvert.SerializeObject(t,Formatting.Indented);
 
             Console.WriteLine(json);
