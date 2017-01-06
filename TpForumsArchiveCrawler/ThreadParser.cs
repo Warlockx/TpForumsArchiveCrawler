@@ -13,7 +13,7 @@ namespace TpForumsArchiveCrawler
 {
     public static class ThreadParser
     {
-        public static async Task<Thread> ParseThread(HttpResponseMessage httpResponseMessage, int threadId)
+        public static async Task<ForumThread> ParseThread(HttpResponseMessage httpResponseMessage, int threadId)
         {
             string html = await httpResponseMessage.Content.ReadAsStringAsync();
             HtmlDocument htmlDocument = new HtmlDocument();
@@ -31,7 +31,7 @@ namespace TpForumsArchiveCrawler
             List<Post> posts = ParsePosts(postNodes);
             Post firsPost = posts?.First();
 
-            return new Thread(breadCrumb,postTitle, firsPost?.PostTime, firsPost?.User, threadId, posts?.Count, posts);
+            return new ForumThread(breadCrumb,postTitle, firsPost?.PostTime, firsPost?.User, threadId, posts?.Count, posts);
         }
 
         private static BreadCrumb ParseNavbar(HtmlNodeCollection htmlNodeCollection)

@@ -21,11 +21,8 @@ namespace TpForumsArchiveCrawler
         {
             WebRequests requests = new WebRequests();
 
-            Thread t = await requests.GetThread(1);
+            List<ForumThread> threads = await requests.GetAllThreads();
 
-            string json = JsonConvert.SerializeObject(t,Formatting.Indented);
-
-            Console.WriteLine(json);
         }
 
     }

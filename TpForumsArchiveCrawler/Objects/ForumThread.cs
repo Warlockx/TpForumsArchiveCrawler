@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TpForumsArchiveCrawler.Objects
 {
-    public class Thread
+    public class ForumThread
     {
         public BreadCrumb BreadCrumb { get; }
         public string Title { get; }
@@ -17,7 +17,7 @@ namespace TpForumsArchiveCrawler.Objects
         public List<Post> Posts { get; }
 
 
-        public Thread(BreadCrumb breadCrumb, string title, DateTime? postTime, User postCreator, int threadId, int? postCount, List<Post> posts)
+        public ForumThread(BreadCrumb breadCrumb, string title, DateTime? postTime, User postCreator, int threadId, int? postCount, List<Post> posts)
         {
             BreadCrumb = breadCrumb;
             Title = title;
