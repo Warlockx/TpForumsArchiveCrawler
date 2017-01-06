@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Newtonsoft.Json;
+using TpForumsArchiveCrawler.Objects;
 
 namespace TpForumsArchiveCrawler
 {
-    static class Program
+    class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+           Test().Wait();
+            Console.ReadKey();
         }
+
+        private static async Task Test()
+        {
+            WebRequests requests = new WebRequests();
+
+            Thread t = await requests.GetThread(1);
+
+
+            string json = JsonConvert.SerializeObject(t,Formatting.Indented);
+
+            Console.WriteLine(json);
+        }
+
     }
 }
