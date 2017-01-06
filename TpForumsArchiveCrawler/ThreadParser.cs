@@ -22,7 +22,7 @@ namespace TpForumsArchiveCrawler
 
             string postTitle =
                 HttpUtility.HtmlDecode(
-                    htmlDocument.DocumentNode.SelectSingleNode("//div[@id='navbar']/text()[3]")?.InnerText)?.Remove(0, 4);
+                    htmlDocument.DocumentNode.SelectSingleNode("//div[@id='navbar']/text()[3]")?.InnerText).Replace(">", "").Trim();
 
             HtmlNodeCollection navbarNodes = htmlDocument.DocumentNode.SelectNodes("//div[@id='navbar']/a");
             BreadCrumb breadCrumb = ParseNavbar(navbarNodes); 

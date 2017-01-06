@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -21,8 +22,9 @@ namespace TpForumsArchiveCrawler
         {
             WebRequests requests = new WebRequests();
 
-            List<ForumThread> threads = await requests.GetAllThreads();
+            List<ForumThread> threads = await requests.GetAllThreads(true);
 
+           
         }
 
     }

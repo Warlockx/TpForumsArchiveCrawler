@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TpForumsArchiveCrawler.Objects;
 
 namespace TpForumsArchiveCrawler
@@ -22,11 +24,17 @@ namespace TpForumsArchiveCrawler
             return await ThreadParser.ParseThread(responseMessage, threadId);
         }
 
-        public async Task<List<ForumThread>> GetAllThreads()
+        public async Task<List<ForumThread>> GetAllThreads(bool save)
         {
             List<ForumThread> threads = new List<ForumThread>();
             int threadId = 1;
-            while (threads.Count < 1 || !string.IsNullOrWhiteSpace(threads.Last().Title))
+            int blankPages = 0;
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            if (!Directory.Exists(currentDirectory + "/json") && save)
+                Directory.CreateDirectory(currentDirectory + "/json");
+
+            while (blankPages < 100)
             {
                 try
                 {
@@ -41,12 +49,22 @@ namespace TpForumsArchiveCrawler
 
                     if (forumThread != null)
                     {
+                        blankPages = 0;
                         threads.Add(forumThread);
                         Console.WriteLine(
-                            $"Last Crawled ForumThread:\nThread Title = {threads.Last()?.Title}\nThread Id = {threads.Last().ThreadId}\n");
+                            $"Last Crawled ForumThread:\nThread Title = {threads.Last()?.Title}\nThread Id = {threads.Last()?.ThreadId}\n");
+
+                        if (save)
+                        {
+                            string thread = JsonConvert.SerializeObject(forumThread, Formatting.Indented);
+                            File.WriteAllText($"{currentDirectory}/json/{forumThread.ThreadId}.json", thread);
+                        }
                     }
                     else
+                    {
                         Console.WriteLine($"ForumThread {threadId} seems to be a empty page\n");
+                        blankPages++;
+                    }
 
                     threadId++;
                     System.Threading.Thread.Sleep(500);
@@ -55,11 +73,7 @@ namespace TpForumsArchiveCrawler
                 {
                     Console.WriteLine(e);
                 }
-
-
-
             }
-
             return threads;
         }
     }
